@@ -78,7 +78,7 @@ while True: # LOOP
     # The while true is the REPL parser that runs the game until the loop is broken.
     # my player prints the player object
     user_input = input(f"{my_player}, enter a movement command...") # READ
-    
+
     if user_input == "n":
         # Example: if the current room has an n_to then the player's current room is set to where n_to points
         # player.current_room stores the location of the player
@@ -124,14 +124,16 @@ while True: # LOOP
         for item in my_player.current_room.items:
             print(f"\t Item: {item.name},\n\t {item.description}")
 
+        stuff = my_player.current_room.items
+        if len(stuff) == 0:
+            print(f"\t There is nothing to get.\n")
+
+
     if user_input == "take":
         stuff = my_player.current_room.items
         if len(stuff) > 0:
-            for item in stuff:
-                my_player.addItem(item)
-                my_player.PrintInventory()
-                my_player.current_room.removeItem(item, my_player)
-                print("You have picked up one item")
+            my_player.current_room.removeItem(item, my_player)
+            print("You picked up an item")
 
         else:
             print(f"\t There is nothing to get.\n")
