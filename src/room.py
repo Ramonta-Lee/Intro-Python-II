@@ -12,8 +12,17 @@ class Room():
         self.w_to = None
         self.items = []
     
-    def add_item(self, item):
-           self.items.append(item)
+    def addItem(self, item):
+        self.items.append(item)
+
+    def removeItem(self, item):
+        self.items.remove(item)
+        
+
+
+    def Items(self):
+        return self.items
+
 
     def __str__(self):
         return f"{self.name}"
