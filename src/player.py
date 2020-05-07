@@ -5,7 +5,6 @@ from print_wrapper import PrintWrapper
 class Player():
 
     def __init__(self, name, current_room):
-        # super().__init__(self, room_name, room_description)
         self.player_name = name
         self.current_room = current_room
         self.items = []

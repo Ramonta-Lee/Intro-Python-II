@@ -2,7 +2,7 @@ import textwrap
 from room import Room
 from player import Player
 from item import Item
-from print_wrapper import PrintWrapper
+# from print_wrapper import print
 # Declare all the rooms
 
 room = {
@@ -72,7 +72,7 @@ methods = move()
 
 '''
 my_player = Player("John", room["outside"])
-PrintWrapper("Game Instructions: q = quit, n = north, s = south, e = east, w = west")
+print("Game Instructions: q = quit, n = north, s = south, e = east, w = west")
 
 while True: # LOOP
     # The while true is the REPL parser that runs the game until the loop is broken.
@@ -84,57 +84,58 @@ while True: # LOOP
         # player.current_room stores the location of the player
         if my_player.current_room.n_to: # EVAL
             my_player.current_room = my_player.current_room.n_to
-            PrintWrapper(my_player.current_room.description) # PRINT
+            print(my_player.current_room.description) # PRINT
     
         else:
-            PrintWrapper("There is no path in that direction")
+            print("There is no path in that direction")
 
     if user_input == "s":
         if my_player.current_room.s_to:
             my_player.current_room = my_player.current_room.s_to
-            PrintWrapper(my_player.current_room.description)
+            print(my_player.current_room.description)
     
         else:
-            PrintWrapper("There is no path in that direction")
+            print("There is no path in that direction")
 
     if user_input == "e":
         if my_player.current_room.e_to:
             my_player.current_room = my_player.current_room.e_to
-            PrintWrapper(my_player.current_room.description)
+            print(my_player.current_room.description)
     
         else:
-            PrintWrapper("There is no path in that direction")
+            print("There is no path in that direction")
 
     if user_input == "w":
         if my_player.current_room.w_to:
             my_player.current_room = my_player.current_room.w_to
-            PrintWrapper(my_player.current_room.description)
+            print(my_player.current_room.description)
     
         else:
-            PrintWrapper("There is no path in that direction")
+            print("There is no path in that direction")
 
     # Searching 
 
-    # if you add an 'or' statement to option the input, it will always PrintWrapper the inventory????
+    # if you add an 'or' statement to option the input, it will always print the inventory????
 
     if user_input == "inv":
         my_player.PrintInventory()
     
     if user_input == "look":
         for item in my_player.current_room.items:
-            PrintWrapper(f"\t Item: {item.name},\n\t {item.description}")
+            print(f"\t Item: {item.name},\n\t {item.description}")
 
     if user_input == "take":
         stuff = my_player.current_room.items
         if len(stuff) > 0:
             for item in stuff:
                 my_player.addItem(item)
-                PrintWrapper(item.name)
-               
-        
+                my_player.PrintInventory()
+                my_player.current_room.removeItem(item, my_player)
+                print("You have picked up one item")
+
         else:
-            PrintWrapper(f"\t There is nothing to get.\n")
-        
+            print(f"\t There is nothing to get.\n")
+
 
     if user_input == "q":
         exit(0)
