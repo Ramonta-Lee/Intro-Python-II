@@ -2,7 +2,7 @@ import textwrap
 from room import Room
 from player import Player
 from item import Item
-# from print_wrapper import print
+from print_wrapper import PrintWrapper
 # Declare all the rooms
 
 room = {
@@ -39,7 +39,7 @@ room['treasure'].s_to = room['narrow']
 # Declare all items
 
 item = {
-    'Sword': Item("Wooden Sword", "This is but a child's sword. You will need more than this to best the cave"),
+    'Sword': Item("Sword", "This is but a child's sword. You will need more than this to best the cave"),
 
     'Shovel': Item("Shovel", "Best for digging for gold or your grave"),
 
@@ -71,76 +71,116 @@ attributes = name,
 methods = move()
 
 '''
-my_player = Player("John", room["outside"])
-print("Game Instructions: q = quit, n = north, s = south, e = east, w = west")
 
-while True: # LOOP
+# this print statement changes the color of the terminal
+print("\033[1;36;40m \n")
+
+PName = input("Welcome brave and adventurous challenger, please tell me your name...")
+
+my_player = Player(PName, room["outside"])
+print(f"""Welcome {my_player.name} to Cave Quest! The journey ahead is long and dreary and you'll find yourself weak, and weary but do not give up!\nFor what lies ahead is beyond your wildest dreams. Game Instructions: q = quit, n = north, s = south, e = east, w = west
+    """)
+
+done = False
+
+while not done: # LOOP
     # The while true is the REPL parser that runs the game until the loop is broken.
     # my player prints the player object
-    user_input = input(f"{my_player}, enter a movement command...") # READ
 
-    if user_input == "n":
-        # Example: if the current room has an n_to then the player's current room is set to where n_to points
-        # player.current_room stores the location of the player
-        if my_player.current_room.n_to: # EVAL
-            my_player.current_room = my_player.current_room.n_to
-            print(my_player.current_room.description) # PRINT
-    
-        else:
-            print("There is no path in that direction")
+    user_input = input(f"{my_player}, enter a movement command...").lower().split(" ") # READ
 
-    if user_input == "s":
-        if my_player.current_room.s_to:
-            my_player.current_room = my_player.current_room.s_to
-            print(my_player.current_room.description)
-    
-        else:
-            print("There is no path in that direction")
 
-    if user_input == "e":
-        if my_player.current_room.e_to:
-            my_player.current_room = my_player.current_room.e_to
-            print(my_player.current_room.description)
-    
-        else:
-            print("There is no path in that direction")
+    if len(user_input) > 2 or len(user_input) < 1:
+        print("I do not understand your command")
+        continue
 
-    if user_input == "w":
-        if my_player.current_room.w_to:
-            my_player.current_room = my_player.current_room.w_to
-            print(my_player.current_room.description)
-    
-        else:
-            print("There is no path in that direction")
+    if len(user_input) == 1:
+        cmd = user_input[0]
 
-    # Searching 
+        if cmd == "n":
+            # Example: if the current room has an n_to then the player's current room is set to where n_to points
+            # player.current_room stores the location of the player
+            if my_player.current_room.n_to: # EVAL
+                my_player.current_room = my_player.current_room.n_to
+                print(my_player.current_room.description) # PRINT
+        
+            else:
+                print("There is no path in that direction")
 
-    # if you add an 'or' statement to option the input, it will always print the inventory????
+        if cmd == "s":
+            if my_player.current_room.s_to:
+                my_player.current_room = my_player.current_room.s_to
+                print(my_player.current_room.description)
+        
+            else:
+                print("There is no path in that direction")
 
-    if user_input == "inv":
-        my_player.PrintInventory()
-    
-    if user_input == "look":
-        for item in my_player.current_room.items:
-            print(f"\t Item: {item.name},\n\t {item.description}")
+        if cmd == "e":
+            if my_player.current_room.e_to:
+                my_player.current_room = my_player.current_room.e_to
+                print(my_player.current_room.description)
+        
+            else:
+                print("There is no path in that direction")
 
+        if cmd == "w":
+            if my_player.current_room.w_to:
+                my_player.current_room = my_player.current_room.w_to
+                print(my_player.current_room.description)
+        
+            else:
+                print("There is no path in that direction")
+
+        # Searching 
+
+        # if you add an 'or' statement to option the input, it will always print the inventory????
+
+        if cmd == "inv":
+            my_player.PrintInventory()
+        
+        if cmd == "look":
+            for item in my_player.current_room.items:
+                print(f"\t Item: {item.name},\n\t {item.description}")
+
+            stuff = my_player.current_room.items
+            if len(stuff) == 0:
+                print(f"\t There is nothing to get.\n")
+
+        if cmd == "q" or cmd == "quit":
+            done = True
+       
+
+    # two word commands
+
+    if len(user_input) == 2:
+        cmd = user_input[0]
+        thing = user_input[1]
         stuff = my_player.current_room.items
-        if len(stuff) == 0:
-            print(f"\t There is nothing to get.\n")
+        # if len(stuff) == 0:
+        #     print(f"\t There is nothing to get")
+        if cmd == "take":
+            for item in stuff:
+                # getattr takes in two arguments the object you're looking in and an attribute/key it has
+                # hasattr takes in two arguments the object and the attribute but it only checks if the attr exists.
+                if thing == getattr(item, "name").lower():
+                    my_player.addItem(item)
+                    my_player.current_room.removeItem(item)
+                    print(f"\t you have obtained {thing}")
 
+                elif thing != getattr(item, "name").lower():
+                    print("Already gone 🤦‍♀️")
+                else:
+                    print(f"\t There is nothing to get.")
 
-    if user_input == "take":
-        stuff = my_player.current_room.items
-        if len(stuff) > 0:
-            my_player.current_room.removeItem(item, my_player)
-            print("You picked up an item")
+        if cmd == "drop":
+            for item in my_player.items:
+                if thing == getattr(item, "name").lower():
+                    my_player.removeItem(item)
+                    print(f"\t you have dropped {thing}")
 
-        else:
-            print(f"\t There is nothing to get.\n")
+                else:
+                    print(f"\t you do not have this {thing} ")
 
-
-    if user_input == "q":
-        exit(0)
 
 
        

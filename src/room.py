@@ -13,12 +13,15 @@ class Room():
         self.items = []
     
     def addItem(self, item):
-           self.items.append(item)
+        self.items.append(item)
 
-    def removeItem(self, item, player):
-        if item in self.items:
-            self.items.remove(item)
-            player.addItem(item)
+    def removeItem(self, item):
+        self.items.remove(item)
+        
+
+
+    def Items(self):
+        return self.items
 
 
     def __str__(self):
