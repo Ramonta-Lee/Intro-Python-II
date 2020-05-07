@@ -45,7 +45,7 @@ item = {
 
     'Gold': Item("Gold", "Shiny objects can get you what you need"),
 
-    'Axe': Item("Golden Axe", "A mighty fine weapon")
+    'Axe': Item("Axe", "A Golden Axe! A mighty fine weapon")
 }
 
 
@@ -173,13 +173,14 @@ while not done: # LOOP
                     print(f"\t There is nothing to get.")
 
         if cmd == "drop":
-            for item in my_player.items:
-                if thing == getattr(item, "name").lower():
-                    my_player.removeItem(item)
-                    print(f"\t you have dropped {thing}")
+            if len(my_player.items) > 0:
+                for item in my_player.items:
+                    if thing == getattr(item, "name").lower():
+                        my_player.removeItem(item)
+                        print(f"\t you have dropped {thing}")
 
-                else:
-                    print(f"\t you do not have this {thing} ")
+            elif len(my_player.items) == 0:
+                print(f"\t you do not have this {thing} ")
 
 
 
