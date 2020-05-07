@@ -22,6 +22,8 @@ to north. The smell of gold permeates the air."""),
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
+
+    'graveyard': Room("Graveyard", """You've entered the graveyard, dig your grave""")
 }
 
 
@@ -35,6 +37,8 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+room['graveyard'].n_to = room['outside']
+room['outside'].s_to = room['graveyard']
 
 # Declare all items
 
